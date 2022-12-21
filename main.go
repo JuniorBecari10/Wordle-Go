@@ -9,6 +9,7 @@ import (
   "strings"
   "bufio"
   "math/rand"
+  "time"
 )
 
 var (
@@ -33,6 +34,7 @@ func main() {
 // --- Functions --- //
 
 func RunGame() {
+  rand.Seed(time.Now().UnixNano())
   ChooseWord()
   
   for {
@@ -40,6 +42,11 @@ func RunGame() {
     color.Green("  W O R D L E\n\n")
     
     PrintWords()
+    
+    if Verify(scanner.Text()) {
+      color.Green("Yeah! You hit the correct word!")
+      os.Exit(0)
+    }
     
     fmt.Printf("> ");
     scanner.Scan()
@@ -54,11 +61,17 @@ func PrintWords() {
 }
 
 func SendWord(word string) {
-  if len(word)
+  if len(word) == len(chosenWord) {
+    sentWords = append(sentWords, word)
+  }
 }
 
 func ChooseWord() {
-  
+  chosenWord = words[rand.Intn(len(words))]
+}
+
+func Verify(word string) bool {
+  return word == chosenWord
 }
 
 func Clear() {
