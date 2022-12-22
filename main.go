@@ -13,6 +13,14 @@ import (
   "strconv"
 )
 
+const (
+  gray byte = 0
+  yellow byte = 1
+  green byte = 2
+  
+  attemptsDefault int = 6
+)
+
 var (
   words []string
   sentWords []Word
@@ -20,13 +28,7 @@ var (
   scanner *bufio.Scanner = bufio.NewScanner(os.Stdin)
   
   length int = 0
-  attempts int = 6
-)
-
-const (
-  gray byte = 0
-  yellow byte = 1
-  green byte = 2
+  attempts int = attemptsDefault
 )
 
 // 0 - (gray - isn't in the word),
@@ -63,7 +65,30 @@ func RunGame() {
     PrintLogo()
     
     col := color.New(color.FgCyan)
-    col.Printf("The word has %d letters.\n\n", len(chosenWord))
+    
+    if len(chosenWord) > 1 {
+      col.Printf("The word has %d letters.\n", len(chosenWord))
+    } else {
+      col.Printf("The word has %d letter.\n", len(chosenWord))
+    }
+    
+    if attempts > 0 {
+      if attempts > 1 {
+        col.Printf("You have %d remaining attempts.\n\n", attempts)
+      } else {
+        col.Printf("You have %d remaining attempt.\n\n", attempts)
+      }
+    } else if attempts == 0 {
+      fmt.Println()
+      PrintWords()
+      
+      color.Red("Oh no.")
+      color.Red("The word was %s.", chosenWord)
+      
+      os.Exit(0)
+    } else {
+      col.Printf("You have unlimited attempts.\n\n")
+    }
     
     PrintWords()
     
@@ -131,6 +156,10 @@ func SendWord(word string) {
     }
     
     sentWords = append(sentWords, wordAdd)
+    
+    if attempts > 0 {
+      attempts--
+    }
   }
 }
 
@@ -160,11 +189,21 @@ func ReadArgs() {
       if a == "-l" {
         ll, err := strconv.Atoi(os.Args[i + 1])
         
-        if err != nil || ll < 0 {
+        if err != nil || ll < 1 {
           color.Red("Invalid length.")
+          os.Exit(0)
         }
         
         length = ll
+      } else if a == "-a" {
+        aa, err := strconv.Atoi(os.Args[i + 1])
+        
+        if err != nil || aa < 1 {
+          color.Red("Invalid number of attempts.")
+          os.Exit(0)
+        }
+        
+        attempts = aa
       }
     }
   }
