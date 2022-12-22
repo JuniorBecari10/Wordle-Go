@@ -14,10 +14,24 @@ import (
 
 var (
   words []string
-  sentWords []string
+  sentWords []Word
   chosenWord string
   scanner *bufio.Scanner = bufio.NewScanner(os.Stdin)
 )
+
+const (
+  gray byte = 0
+  yellow byte = 1
+  green byte = 2
+)
+
+// 0 - (gray - isn't in the word),
+// 1 - (yellow - is in the word, but in the wrong place),
+// 2 - (green - in the right place)
+type Word struct {
+  word string
+  colors []byte
+}
 
 func main() {
   if len(os.Args) != 2 {
@@ -28,19 +42,18 @@ func main() {
   }
   
   LoadWords(os.Args[1])
-  fmt.Println(chosenWord)
-  //RunGame()
+  
+  rand.Seed(time.Now().UnixNano())
+  ChooseWord()
+  RunGame()
 }
 
 // --- Functions --- //
 
 func RunGame() {
-  rand.Seed(time.Now().UnixNano())
-  ChooseWord()
-  
   for {
     Clear()
-    color.Green("  W O R D L E\n\n")
+    PrintLogo()
     
     PrintWords()
     
@@ -57,12 +70,24 @@ func RunGame() {
   }
 }
 
+func PrintLogo() {
+  color.Green("#   #  ###  ###  ##   #    ###")
+  color.Green("#   #  # #  # #  # #  #    #")
+  color.Green("# # #  # #  ##   # #  #    ##")
+  color.Green("## ##  # #  # #  # #  #    #")
+  color.Green("#   #  ###  # #  ##   ###  ###")
+}
+
 func PrintWords() {
   
 }
 
 func SendWord(word string) {
   if len(word) == len(chosenWord) {
+    wordAdd = Word{word, 0}
+    
+    
+    
     sentWords = append(sentWords, word)
   }
 }
