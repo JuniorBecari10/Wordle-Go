@@ -55,6 +55,9 @@ func RunGame() {
     Clear()
     PrintLogo()
     
+    col := color.New(color.FgCyan)
+    col.Printf("The word has %d letters.\n\n", len(chosenWord))
+    
     PrintWords()
     
     if Verify(scanner.Text()) {
@@ -62,7 +65,7 @@ func RunGame() {
       os.Exit(0)
     }
     
-    fmt.Printf("> ");
+    fmt.Printf("\n> ");
     scanner.Scan()
     word := scanner.Text()
     
@@ -76,19 +79,48 @@ func PrintLogo() {
   color.Green("# # #  # #  ##   # #  #    ##")
   color.Green("## ##  # #  # #  # #  #    #")
   color.Green("#   #  ###  # #  ##   ###  ###")
+  fmt.Println()
 }
 
 func PrintWords() {
-  
+  if len(sentWords) > 0 {
+    for _, w := range sentWords {
+      for ii, c := range w.word {
+        col := color.New()
+        
+        if w.colors[ii] == 0 {
+          col = col.Add(color.FgWhite)
+        } else if w.colors[ii] == 1 {
+          col = col.Add(color.FgYellow)
+        } else if w.colors[ii] == 2 {
+          col = col.Add(color.FgGreen)
+        }
+        
+        col.Printf("%s ", strings.ToUpper(string(c)))
+      }
+      
+      fmt.Println()
+    }
+  }
 }
 
 func SendWord(word string) {
   if len(word) == len(chosenWord) {
-    wordAdd = Word{word, 0}
+    wordAdd := Word { word, make([]byte, len(word)) }
     
+    for i, c := range word {
+      co := 0
+      
+      if c == rune(chosenWord[i]) {
+        co = 2
+      } else if strings.Contains(chosenWord, string(c)) {
+        co = 1
+      }
+      
+      wordAdd.colors[i] = byte(co)
+    }
     
-    
-    sentWords = append(sentWords, word)
+    sentWords = append(sentWords, wordAdd)
   }
 }
 
