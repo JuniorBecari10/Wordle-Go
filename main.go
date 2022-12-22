@@ -35,9 +35,11 @@ type Word struct {
 
 func main() {
   if len(os.Args) != 2 {
-    color.Red("Usage: wordle <file>\n\n")
+    color.Red("Usage: wordle <file> [-l length] [-a attempts]\n\n")
     
     color.Cyan("<file>: A file to read the words from.")
+    color.Cyan("[-l length]: The desired length of the word.")
+    color.Cyan("[-a attempts]: Option to set the allowed number of attempts. Set to -1 for unlimited attempts.")
     os.Exit(0)
   }
   
@@ -65,7 +67,7 @@ func RunGame() {
       os.Exit(0)
     }
     
-    fmt.Printf("\n> ");
+    fmt.Printf("> ");
     scanner.Scan()
     word := scanner.Text()
     
@@ -101,6 +103,8 @@ func PrintWords() {
       
       fmt.Println()
     }
+    
+    fmt.Println()
   }
 }
 
