@@ -28,7 +28,8 @@ func main() {
   }
   
   LoadWords(os.Args[1])
-  RunGame()
+  fmt.Println(chosenWord)
+  //RunGame()
 }
 
 // --- Functions --- //
