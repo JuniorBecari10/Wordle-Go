@@ -10,6 +10,7 @@ import (
   "bufio"
   "math/rand"
   "time"
+  "strconv"
 )
 
 var (
@@ -17,6 +18,9 @@ var (
   sentWords []Word
   chosenWord string
   scanner *bufio.Scanner = bufio.NewScanner(os.Stdin)
+  
+  length int = 0
+  attempts int = 6
 )
 
 const (
@@ -34,7 +38,7 @@ type Word struct {
 }
 
 func main() {
-  if len(os.Args) != 2 {
+  if len(os.Args) < 2 {
     color.Red("Usage: wordle <file> [-l length] [-a attempts]\n\n")
     
     color.Cyan("<file>: A file to read the words from.")
@@ -43,6 +47,7 @@ func main() {
     os.Exit(0)
   }
   
+  ReadArgs()
   LoadWords(os.Args[1])
   
   rand.Seed(time.Now().UnixNano())
@@ -68,6 +73,7 @@ func RunGame() {
     }
     
     fmt.Printf("> ");
+    
     scanner.Scan()
     word := scanner.Text()
     
@@ -130,10 +136,38 @@ func SendWord(word string) {
 
 func ChooseWord() {
   chosenWord = words[rand.Intn(len(words))]
+  
+  if length != 0 {
+    for len(chosenWord) != length {
+      chosenWord = words[rand.Intn(len(words))]
+    }
+  }
 }
 
 func Verify(word string) bool {
   return word == chosenWord
+}
+
+func ReadArgs() {
+  for i, arg := range os.Args {
+    if i == 0 {
+      continue
+    }
+    
+    a := string(arg)
+    
+    if i < len(os.Args) - 1 {
+      if a == "-l" {
+        ll, err := strconv.Atoi(os.Args[i + 1])
+        
+        if err != nil || ll < 0 {
+          color.Red("Invalid length.")
+        }
+        
+        length = ll
+      }
+    }
+  }
 }
 
 func Clear() {
