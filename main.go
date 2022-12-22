@@ -41,11 +41,12 @@ type Word struct {
 
 func main() {
   if len(os.Args) < 2 {
-    color.Red("Usage: wordle <file> [-l length] [-a attempts]\n\n")
+    color.Red("Usage: wordle <file> [-l length] [-a attempts] [-d]\n\n")
     
     color.Cyan("<file>: A file to read the words from.")
     color.Cyan("[-l length]: The desired length of the word.")
     color.Cyan("[-a attempts]: Option to set the allowed number of attempts. Set to -1 for unlimited attempts.")
+    color.Cyan("[-d]: Option to define whether accept of not only words of the specified <file>.")
     os.Exit(0)
   }
   
@@ -198,7 +199,7 @@ func ReadArgs() {
       } else if a == "-a" {
         aa, err := strconv.Atoi(os.Args[i + 1])
         
-        if err != nil || aa < 1 {
+        if err != nil || aa == 0 {
           color.Red("Invalid number of attempts.")
           os.Exit(0)
         }
