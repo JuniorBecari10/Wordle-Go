@@ -29,6 +29,8 @@ var (
   
   length int = 0
   attempts int = attemptsDefault
+  dict bool = true
+  showDict bool = false
 )
 
 // 0 - (gray - isn't in the word),
@@ -46,7 +48,7 @@ func main() {
     color.Cyan("<file>: A file to read the words from.")
     color.Cyan("[-l length]: The desired length of the word.")
     color.Cyan("[-a attempts]: Option to set the allowed number of attempts. Set to -1 for unlimited attempts.")
-    color.Cyan("[-d]: Option to define whether accept of not only words of the specified <file>.")
+    color.Cyan("[-d]: Option to define restriction to only words of the dictionary (inside <file>).")
     os.Exit(0)
   }
   
@@ -65,6 +67,15 @@ func RunGame() {
     Clear()
     PrintLogo()
     
+    color.Yellow("Hint: If you want to exit, type !exit, and then confirm.\n")
+    
+    if dict && showDict {
+      colr := color.New(color.FgRed)
+      colr.Printf("The word %s is not in the dictionary.\n", scanner.Text())
+    }
+    
+    fmt.Println()
+    
     col := color.New(color.FgCyan)
     
     if len(chosenWord) > 1 {
@@ -75,11 +86,21 @@ func RunGame() {
     
     if attempts > 0 {
       if attempts > 1 {
-        col.Printf("You have %d remaining attempts.\n\n", attempts)
+        col.Printf("You have %d remaining attempts.\n", attempts)
       } else {
-        col.Printf("You have %d remaining attempt.\n\n", attempts)
+        col.Printf("You have %d remaining attempt.\n", attempts)
       }
     } else if attempts == 0 {
+      col.Printf("Your attempts have ended.\n")
+    } else {
+      col.Printf("You have unlimited attempts.\n")
+    }
+    
+    if !dict {
+      col.Println("You can type words outside the dictionary.")
+    }
+    
+    if attempts == 0 {
       fmt.Println()
       PrintWords()
       
@@ -87,10 +108,9 @@ func RunGame() {
       color.Red("The word was %s.", chosenWord)
       
       os.Exit(0)
-    } else {
-      col.Printf("You have unlimited attempts.\n\n")
     }
     
+    fmt.Println()
     PrintWords()
     
     if Verify(scanner.Text()) {
@@ -141,7 +161,29 @@ func PrintWords() {
 }
 
 func SendWord(word string) {
+  showDict = false
+  
+  if word == "!exit" {
+    col := color.New(color.FgRed)
+    col.Printf("Are you sure? (y/n) ")
+    
+    scanner.Scan()
+    ans := scanner.Text()
+    
+    if strings.ToLower(ans) == "y" {
+      col = color.New(color.FgCyan)
+      col.Printf("The word was %s.", chosenWord)
+      
+      os.Exit(0)
+    }
+  }
+  
   if len(word) == len(chosenWord) {
+    if dict && !ContainsArray(words, word) {
+      showDict = true
+      return
+    }
+    
     wordAdd := Word { word, make([]byte, len(word)) }
     
     for i, c := range word {
@@ -175,7 +217,7 @@ func ChooseWord() {
 }
 
 func Verify(word string) bool {
-  return word == chosenWord
+  return strings.ToLower(word) == strings.ToLower(chosenWord)
 }
 
 func ReadArgs() {
@@ -184,7 +226,7 @@ func ReadArgs() {
       continue
     }
     
-    a := string(arg)
+    a := strings.ToLower(string(arg))
     
     if i < len(os.Args) - 1 {
       if a == "-l" {
@@ -207,6 +249,10 @@ func ReadArgs() {
         attempts = aa
       }
     }
+    
+    if a == "-d" {
+      dict = false
+    }
   }
 }
 
@@ -222,6 +268,16 @@ func Clear() {
     cmd.Stdout = os.Stdout
     cmd.Run()
   }
+}
+
+func ContainsArray(arr []string, s string) bool {
+  for _, v := range arr {
+    if strings.ToLower(v) == strings.ToLower(s) {
+      return true
+    }
+  }
+  
+  return false
 }
 
 func LoadWords(file string) {
