@@ -128,11 +128,19 @@ func RunGame() {
 }
 
 func PrintLogo() {
-  color.Green("#   #  ###  ###  ##   #    ###")
-  color.Green("#   #  # #  # #  # #  #    #")
-  color.Green("# # #  # #  ##   # #  #    ##")
-  color.Green("## ##  # #  # #  # #  #    #")
-  color.Green("#   #  ###  # #  ##   ###  ###")
+  //color.Green("#   #  ###  ###  ##   #    ###")
+  //color.Green("#   #  # #  # #  # #  #    #")
+  //color.Green("# # #  # #  ##   # #  #    ##")
+  //color.Green("## ##  # #  # #  # #  #    #")
+  //color.Green("#   #  ###  # #  ##   ###  ###")
+  
+  color.Green(" __          ______  _____  _____  _      ______ ")
+  color.Green(" \\ \\        / / __ \\|  __ \\|  __ \\| |    |  ____|")
+  color.Green("  \\ \\  /\\  / / |  | | |__) | |  | | |    | |__   ")
+  color.Green("   \\ \\/  \\/ /| |  | |  _  /| |  | | |    |  __|  ")
+  color.Green("    \\  /\\  / | |__| | | \\ \\| |__| | |____| |____ ")
+  color.Green("     \\/  \\/   \\____/|_|  \\_\\_____/|______|______|")
+  
   fmt.Println()
 }
 
