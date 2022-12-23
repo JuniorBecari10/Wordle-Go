@@ -1,4 +1,4 @@
-module wordle
+module wordlen
 
 go 1.18
 

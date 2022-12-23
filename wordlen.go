@@ -43,11 +43,11 @@ type Word struct {
 
 func main() {
   if len(os.Args) < 2 {
-    color.Red("Usage: wordle <file> [-l length] [-a attempts] [-d]\n\n")
+    color.Red("Usage: wordlen <file> [-l length] [-a attempts] [-d]\n\n")
     
     color.Cyan("<file>: A file to read the words from.")
     color.Cyan("[-l length]: The desired length of the word.")
-    color.Cyan("[-a attempts]: Option to set the allowed number of attempts. Set to -1 for unlimited attempts.")
+    color.Cyan("[-a attempts]: Option to set the allowed number of attempts. Set to a negative number for unlimited attempts.")
     color.Cyan("[-d]: Option to define restriction to only words of the dictionary (inside <file>).")
     os.Exit(0)
   }
@@ -115,6 +115,9 @@ func RunGame() {
     
     if Verify(scanner.Text()) {
       color.Green("Yeah! You hit the correct word!")
+      
+      col = color.New(color.FgGreen)
+      col.Printf("You took %d attempts to complete.\n", len(sentWords))
       os.Exit(0)
     }
     
@@ -134,12 +137,12 @@ func PrintLogo() {
   //color.Green("## ##  # #  # #  # #  #    #")
   //color.Green("#   #  ###  # #  ##   ###  ###")
   
-  color.Green(" __          ______  _____  _____  _      ______ ")
-  color.Green(" \\ \\        / / __ \\|  __ \\|  __ \\| |    |  ____|")
-  color.Green("  \\ \\  /\\  / / |  | | |__) | |  | | |    | |__   ")
-  color.Green("   \\ \\/  \\/ /| |  | |  _  /| |  | | |    |  __|  ")
-  color.Green("    \\  /\\  / | |__| | | \\ \\| |__| | |____| |____ ")
-  color.Green("     \\/  \\/   \\____/|_|  \\_\\_____/|______|______|")
+  color.Green(" __          __   ____    _____    _____    _        ______   _   _ ")
+  color.Green(" \\ \\        / /  / __ \\  |  __ \\  |  __ \\  | |      |  ____| | \\ | |")
+  color.Green("  \\ \\  /\\  / /  | |  | | | |__) | | |  | | | |      | |__    |  \\| |")
+  color.Green("   \\ \\/  \\/ /   | |  | | |  _  /  | |  | | | |      |  __|   |     |")
+  color.Green("    \\  /\\  /    | |__| | | | \\ \\  | |__| | | |____  | |____  | |\\  |")
+  color.Green("     \\/  \\/      \\____/  |_|  \\_\\ |_____/  |______| |______| |_| \\_|")
   
   fmt.Println()
 }
