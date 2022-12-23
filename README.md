@@ -10,18 +10,18 @@ And as you type, the word you typed will be colored as:
 
 ### Colors
 
-`Green` - The letter is in the correct place.
-`Yellow` - The letter is in the word, but in another place.
-`White` - The letter isn't in the word.
+`Green` - The letter is in the correct place. <br />
+`Yellow` - The letter is in the word, but in another place. <br />
+`White` - The letter isn't in the word. <br />
 
 ### Options
 
 You can launch the game with some options too.
 
-`<file>` **Obligatory.** Here you specify the file containing the words for the game (the dictionary). This must be the first argument.
-`[-l length]` **Optional.** Here you can specify the length of the chosen word instead of a random length.
-`[-a attempts]` **Optional.** Here you can specify the amount of attempts you have. If you type a negative number, you can have unlimited attempts! But you can't type `0` here. **Default value: 6.**
-`[-d]` **Optional.** Flag to specify if you can type only words of the dictionary or not. Typing this will disable the option. **Default value: true.**
+`<file>` **Obligatory.** Here you specify the file containing the words for the game (the dictionary). This must be the first argument. <br />
+`[-l length]` **Optional.** Here you can specify the length of the chosen word instead of a random length. <br />
+`[-a attempts]` **Optional.** Here you can specify the amount of attempts you have. If you type a negative number, you can have unlimited attempts! But you can't type `0` here. **Default value: 6.** <br />
+`[-d]` **Optional.** Flag to specify if you can type only words of the dictionary or not. Typing this will disable the option. **Default value: true.** <br />
 
 #### Examples:
 
